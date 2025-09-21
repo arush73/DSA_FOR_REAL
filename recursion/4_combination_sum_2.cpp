@@ -1,27 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void combination_sum_1(vector<int> array, int index, int target, set<vector<int>> &ans, vector<int> temp)
+void combination_sum_2(vector<int> array, int index, int target, set<vector<int>> &ans, vector<int> temp)
 {
-    if (index == array.size())
-    {
-        return;
-    }
-
     if (target == 0)
     {
         ans.insert(temp);
         return;
     }
 
-    // picking if element is smaller than the target and not inc the index
-    if (array[index] <= target)
+    for (int i = index; i < array.size(); i++)
     {
+        if (i > index && array[i] == array[i - 1])
+        {
+            continue;
+        }
+        if (array[i] > target)
+        {
+
+            break;
+        }
+
         temp.push_back(array[index]);
-        combination_sum_1(array, index, target - array[index], ans, temp);
+        combination_sum_2(array, index + 1, target - array[i], ans, temp);
         temp.pop_back();
     }
-    combination_sum_1(array, index + 1, target, ans, temp);
 }
 
 void printArray(vector<int> array)
@@ -45,17 +48,15 @@ void printSet(set<vector<int>> ans)
 
 int main()
 {
+    vector<int> array = {10, 1, 2, 7, 6, 1, 5};
+    sort(array.begin(), array.end());
 
     set<vector<int>> ans;
 
-    vector<int> array = {2, 3, 6, 7};
+    int target = 8;
 
-    int target = 7;
-
-    combination_sum_1(array, 0, target, ans, {});
-
+    combination_sum_2(array, 0, target, ans, {});
     cout << "The answer is: " << endl;
     printSet(ans);
-
     return 0;
 }
